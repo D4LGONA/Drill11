@@ -1,5 +1,5 @@
 from pico2d import load_image, clear_canvas, update_canvas, get_events, get_time
-
+import game_framework
 
 def init():
     global image
@@ -15,9 +15,8 @@ def finish():
     pass
 
 def update():
-    global running
     if get_time() - logo_start_time >= 2.0:
-        running = False
+        game_framework.quit()
     pass
 
 def draw():

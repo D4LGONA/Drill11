@@ -1,15 +1,7 @@
 from pico2d import open_canvas, delay, close_canvas
 import logo_mode
-#import logo_mode
+import game_framework
 
 open_canvas()
-logo_mode.init()
-# game loop
-while logo_mode.running:
-    logo_mode.handle_events()
-    logo_mode.update()
-    logo_mode.draw()
-    delay(0.01)
-# finalization code
-logo_mode.finish()
+game_framework.run(logo_mode)
 close_canvas()
