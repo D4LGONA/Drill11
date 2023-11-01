@@ -1,9 +1,9 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 # 내 새는 1.5미터 * 1.5미터짜리 새로 할래요 -> 50px * 50px 새 인거죠
-# 1초에 3미터 가고 1초에 2번 날갯짓을 합니다
+# 한시간에 30km 가자
 
 PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 20.0
+RUN_SPEED_KMPH = 30
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -46,19 +46,21 @@ class Run:
 
         bird.x += bird.dir * RUN_SPEED_PPS * game_framework.frame_time
 
-        if(bird.x <= 25):
-            bird.dir = -1
-        if(bird.x >= 775):
+        if (bird.x <= 25):
             bird.dir = 1
+            bird.face_dir = 1
+        if (bird.x >= 1575):
+            bird.dir = -1
+            bird.face_dir = -1
         #bird.x = clamp(25, bird.x, 1600-25)
 
 
     @staticmethod
     def draw(bird):
         if(bird.dir == 1):
-            bird.image.clip_composite_draw((int(bird.frame)%5) * 180, bird.action * 170, 180, 170, 0, 'h', bird.x, bird.y, 50, 50)
+            bird.image.clip_composite_draw((int(bird.frame) % 5) * 180, bird.action * 170, 180, 170, 0, 'n', bird.x, bird.y, 50, 50)
         else:
-            bird.image.clip_composite_draw((int(bird.frame)%5) * 180, bird.action * 170, 180, 170, 0, 'n', bird.x, bird.y,
+            bird.image.clip_composite_draw((int(bird.frame) % 5) * 180, bird.action * 170, 180, 170, 0, 'h', bird.x, bird.y,
                                            50, 50)
 
 class StateMachine:
@@ -89,11 +91,11 @@ class StateMachine:
 
 class Bird:
     def __init__(self):
-        self.x, self.y = randint(200, 600), 400
+        self.x, self.y = randint(200, 600), randint(300, 500)
         self.frame = 0
         self.action = 0
         self.face_dir = 1
-        self.dir = 1
+        self.dir = -1
         self.image = load_image('bird_animation.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
