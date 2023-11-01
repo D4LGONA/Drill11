@@ -38,19 +38,28 @@ class Run:
     def do(bird):
         bird.frame = (bird.frame + FRAMES_PER_TIME * game_framework.frame_time) % 14
         if int(bird.frame) < 5:
-            bird.action = 0
+            bird.action = 2
         elif int(bird.frame) < 10:
             bird.action = 1
         else:
-            bird.action = 2
+            bird.action = 0
 
         bird.x += bird.dir * RUN_SPEED_PPS * game_framework.frame_time
+
+        if(bird.x <= 25):
+            bird.dir = -1
+        if(bird.x >= 775):
+            bird.dir = 1
         #bird.x = clamp(25, bird.x, 1600-25)
 
 
     @staticmethod
     def draw(bird):
-        bird.image.clip_draw(int(bird.frame) * 100, bird.action * 100, 100, 100, bird.x, bird.y)
+        if(bird.dir == 1):
+            bird.image.clip_composite_draw((int(bird.frame)%5) * 180, bird.action * 170, 180, 170, 0, 'h', bird.x, bird.y, 50, 50)
+        else:
+            bird.image.clip_composite_draw((int(bird.frame)%5) * 180, bird.action * 170, 180, 170, 0, 'n', bird.x, bird.y,
+                                           50, 50)
 
 class StateMachine:
     def __init__(self, boy):
@@ -84,7 +93,7 @@ class Bird:
         self.frame = 0
         self.action = 0
         self.face_dir = 1
-        self.dir = 0
+        self.dir = 1
         self.image = load_image('bird_animation.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
